@@ -1,0 +1,57 @@
+<%inherit file="/base/base.html"/>
+
+<%block name="title">
+    ${_('%s Pull Requests') % c.repo_name}
+</%block>
+
+<%def name="breadcrumbs_links()">
+%if c.from_:
+    ${_("Pull Requests from %s'") % c.repo_name}
+%else:
+    ${_("Pull Requests to '%s'") % c.repo_name}
+%endif
+</%def>
+
+<%block name="header_menu">
+    ${self.menu('repositories')}
+</%block>
+
+<%def name="main()">
+${self.repo_context_bar('showpullrequest')}
+
+<div class="box">
+    <!-- box / title -->
+    <div class="title">
+        ${self.breadcrumbs()}
+        <ul class="links">
+          <li>
+             %if c.authuser.username != 'default':
+              <span>
+                  <a id="open_new_pr" class="btn btn-small btn-success" href="${h.url('pullrequest_home',repo_name=c.repo_name)}"><i class="icon-plus"></i> ${_('Open New Pull Request')}</a>
+              </span>
+             %endif
+              <span>
+                %if c.from_:
+                    <a class="btn btn-small" href="${h.url('pullrequest_show_all',repo_name=c.repo_name,closed=c.closed)}"><i class="icon-git-compare"></i> ${_('Show Pull Requests to %s') % c.repo_name}</a>
+                %else:
+                    <a class="btn btn-small" href="${h.url('pullrequest_show_all',repo_name=c.repo_name,closed=c.closed,from_=1)}"><i class="icon-git-compare"></i> ${_("Show Pull Requests from '%s'") % c.repo_name}</a>
+                %endif
+              </span>
+          </li>
+        </ul>
+    </div>
+
+    <div class="normal-indent">
+        <div>
+        %if c.closed:
+            ${h.link_to(_('Hide closed pull requests (only show open pull requests)'), h.url('pullrequest_show_all',repo_name=c.repo_name,from_=c.from_))}
+        %else:
+            ${h.link_to(_('Show closed pull requests (in addition to open pull requests)'), h.url('pullrequest_show_all',repo_name=c.repo_name,from_=c.from_,closed=1))}
+        %endif
+        </div>
+    </div>
+
+    <%include file='pullrequest_data.html'/>
+
+</div>
+</%def>
