@@ -414,7 +414,7 @@ class User(Base, BaseModel):
     extern_name = Column("extern_name", String(255, convert_unicode=False), nullable=True, unique=None, default=None)
     api_key = Column("api_key", String(255, convert_unicode=False), nullable=True, unique=None, default=None)
     inherit_default_permissions = Column("inherit_default_permissions", Boolean(), nullable=False, unique=None, default=True)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
     _user_data = Column("user_data", LargeBinary(), nullable=True)  # JSON data
 
     user_log = relationship('UserLog')
@@ -678,9 +678,9 @@ class UserApiKeys(Base, BaseModel):
     user_api_key_id = Column("user_api_key_id", Integer(), nullable=False, unique=True, default=None, primary_key=True)
     user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=True, unique=None, default=None)
     api_key = Column("api_key", String(255, convert_unicode=False), nullable=False, unique=True)
-    description = Column('description', UnicodeText(1024))
-    expires = Column('expires', Float(53), nullable=False)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    description = Column(UnicodeText(1024))
+    expires = Column(Float(53), nullable=False)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
 
     user = relationship('User')
 
@@ -795,7 +795,7 @@ class UserGroup(Base, BaseModel):
     users_group_active = Column("users_group_active", Boolean(), nullable=True, unique=None, default=None)
     inherit_default_permissions = Column("users_group_inherit_default_permissions", Boolean(), nullable=False, unique=None, default=True)
     user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=False, unique=False, default=None)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
     _group_data = Column("group_data", LargeBinary(), nullable=True)  # JSON data
 
     members = relationship('UserGroupMember', cascade="all, delete-orphan")
@@ -907,7 +907,7 @@ class RepositoryField(Base, BaseModel):
     field_value = Column("field_value", String(10000, convert_unicode=False), nullable=False)
     field_desc = Column("field_desc", String(1024, convert_unicode=False), nullable=False)
     field_type = Column("field_type", String(255), nullable=False, unique=None)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
 
     repository = relationship('Repository')
 
@@ -955,8 +955,8 @@ class Repository(Base, BaseModel):
     enable_statistics = Column("statistics", Boolean(), nullable=True, unique=None, default=True)
     enable_downloads = Column("downloads", Boolean(), nullable=True, unique=None, default=True)
     description = Column("description", String(10000, convert_unicode=False), nullable=True, unique=None, default=None)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
-    updated_on = Column('updated_on', DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
+    created_on = Column(DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
+    updated_on = Column(DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
     _landing_revision = Column("landing_revision", String(255, convert_unicode=False), nullable=False, unique=False, default=None)
     enable_locking = Column("enable_locking", Boolean(), nullable=False, unique=None, default=False)
     _locked = Column("locked", String(255, convert_unicode=False), nullable=True, unique=False, default=None)
@@ -1469,7 +1469,7 @@ class RepoGroup(Base, BaseModel):
     group_description = Column("group_description", String(10000, convert_unicode=False), nullable=True, unique=None, default=None)
     enable_locking = Column("enable_locking", Boolean(), nullable=False, unique=None, default=False)
     user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=False, unique=False, default=None)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
 
     repo_group_to_perm = relationship('UserRepoGroupToPerm', cascade='all', order_by='UserRepoGroupToPerm.group_to_perm_id')
     users_group_to_perm = relationship('UserGroupRepoGroupToPerm', cascade='all')
@@ -2003,7 +2003,7 @@ class UserFollowing(Base, BaseModel):
     user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=False, unique=None, default=None)
     follows_repo_id = Column("follows_repository_id", Integer(), ForeignKey('repositories.repo_id'), nullable=True, unique=None, default=None)
     follows_user_id = Column("follows_user_id", Integer(), ForeignKey('users.user_id'), nullable=True, unique=None, default=None)
-    follows_from = Column('follows_from', DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
+    follows_from = Column(DateTime(timezone=False), nullable=True, unique=None, default=datetime.datetime.now)
 
     user = relationship('User', primaryjoin='User.user_id==UserFollowing.user_id')
 
@@ -2024,14 +2024,14 @@ class CacheInvalidation(Base, BaseModel):
          'mysql_charset': 'utf8', 'sqlite_autoincrement': True},
     )
     # cache_id, not used
-    cache_id = Column("cache_id", Integer(), nullable=False, unique=True, default=None, primary_key=True)
+    cache_id = Column(Integer(), nullable=False, unique=True, primary_key=True)
     # cache_key as created by _get_cache_key
-    cache_key = Column("cache_key", String(255, convert_unicode=False), nullable=True, unique=None, default=None)
+    cache_key = Column(String(255, convert_unicode=False))
     # cache_args is a repo_name
-    cache_args = Column("cache_args", String(255, convert_unicode=False), nullable=True, unique=None, default=None)
-    # instance sets cache_active True when it is caching,
-    # other instances set cache_active to False to indicate that this cache is invalid
-    cache_active = Column("cache_active", Boolean(), nullable=True, unique=None, default=False)
+    cache_args = Column(String(255, convert_unicode=False))
+    # instance sets cache_active True when it is caching, other instances set
+    # cache_active to False to indicate that this cache is invalid
+    cache_active = Column(Boolean(), nullable=True, unique=None, default=False)
 
     def __init__(self, cache_key, repo_name=''):
         self.cache_key = cache_key
@@ -2039,8 +2039,9 @@ class CacheInvalidation(Base, BaseModel):
         self.cache_active = False
 
     def __unicode__(self):
-        return u"<%s('%s:%s[%s]')>" % (self.__class__.__name__,
-                            self.cache_id, self.cache_key, self.cache_active)
+        return u"<%s('%s:%s[%s]')>" % (
+            self.__class__.__name__,
+            self.cache_id, self.cache_key, self.cache_active)
 
     def _cache_key_partition(self):
         prefix, repo_name, suffix = self.cache_key.partition(self.cache_args)
@@ -2143,24 +2144,25 @@ class ChangesetComment(Base, BaseModel):
         {'extend_existing': True, 'mysql_engine': 'InnoDB',
          'mysql_charset': 'utf8', 'sqlite_autoincrement': True},
     )
-    comment_id = Column('comment_id', Integer(), nullable=False, primary_key=True)
-    repo_id = Column('repo_id', Integer(), ForeignKey('repositories.repo_id'), nullable=False)
-    revision = Column('revision', String(40), nullable=True)
-    pull_request_id = Column("pull_request_id", Integer(), ForeignKey('pull_requests.pull_request_id'), nullable=True)
-    line_no = Column('line_no', Unicode(10), nullable=True)
-    hl_lines = Column('hl_lines', Unicode(512), nullable=True)
-    f_path = Column('f_path', Unicode(1000), nullable=True)
-    user_id = Column('user_id', Integer(), ForeignKey('users.user_id'), nullable=False)
-    text = Column('text', UnicodeText(25000), nullable=False)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
-    modified_at = Column('modified_at', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    comment_id = Column(Integer(), nullable=False, primary_key=True)
+    repo_id = Column(Integer(), ForeignKey('repositories.repo_id'), nullable=False)
+    revision = Column(String(40))
+    pull_request_id = Column(Integer(), ForeignKey('pull_requests.pull_request_id'))
+    line_no = Column(Unicode(10))
+    hl_lines = Column(Unicode(512))
+    f_path = Column(Unicode(1000))
+    user_id = Column(Integer(), ForeignKey('users.user_id'), nullable=False)
+    text = Column(UnicodeText(25000), nullable=False)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    modified_at = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
 
     author = relationship('User')
     repo = relationship('Repository')
     # status_change is frequently used directly in templates - make it a lazy
     # join to avoid fetching each related ChangesetStatus on demand.
     # There will only be one ChangesetStatus referencing each comment so the join will not explode.
-    status_change = relationship('ChangesetStatus', cascade="all, delete-orphan", lazy='joined')
+    status_change = relationship('ChangesetStatus',
+                                 cascade="all, delete-orphan", lazy='joined')
     pull_request = relationship('PullRequest')
 
     @classmethod
@@ -2205,15 +2207,15 @@ class ChangesetStatus(Base, BaseModel):
         (STATUS_UNDER_REVIEW, _("Under Review")),
     ]
 
-    changeset_status_id = Column('changeset_status_id', Integer(), nullable=False, primary_key=True)
-    repo_id = Column('repo_id', Integer(), ForeignKey('repositories.repo_id'), nullable=False)
-    user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=False, unique=None)
-    revision = Column('revision', String(40), nullable=False)
-    status = Column('status', String(128), nullable=False, default=DEFAULT)
-    changeset_comment_id = Column('changeset_comment_id', Integer(), ForeignKey('changeset_comments.comment_id'))
-    modified_at = Column('modified_at', DateTime(), nullable=False, default=datetime.datetime.now)
-    version = Column('version', Integer(), nullable=False, default=0)
-    pull_request_id = Column("pull_request_id", Integer(), ForeignKey('pull_requests.pull_request_id'), nullable=True)
+    changeset_status_id = Column(Integer(), nullable=False, primary_key=True)
+    repo_id = Column(Integer(), ForeignKey('repositories.repo_id'), nullable=False)
+    user_id = Column(Integer(), ForeignKey('users.user_id'), nullable=False, unique=None)
+    revision = Column(String(40), nullable=False)
+    status = Column(String(128), nullable=False, default=DEFAULT)
+    changeset_comment_id = Column(Integer(), ForeignKey('changeset_comments.comment_id'))
+    modified_at = Column(DateTime(), nullable=False, default=datetime.datetime.now)
+    version = Column(Integer(), nullable=False, default=0)
+    pull_request_id = Column(Integer(), ForeignKey('pull_requests.pull_request_id'), nullable=True)
 
     author = relationship('User')
     repo = relationship('Repository')
@@ -2248,18 +2250,18 @@ class PullRequest(Base, BaseModel):
     STATUS_NEW = u'new'
     STATUS_CLOSED = u'closed'
 
-    pull_request_id = Column('pull_request_id', Integer(), nullable=False, primary_key=True)
-    title = Column('title', Unicode(255), nullable=True)
-    description = Column('description', UnicodeText(10240), nullable=True)
-    status = Column('status', Unicode(255), nullable=False, default=STATUS_NEW) # only for closedness, not approve/reject/etc
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
-    updated_on = Column('updated_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
-    user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=False, unique=None)
+    pull_request_id = Column(Integer(), primary_key=True)
+    title = Column(Unicode(255), nullable=True)
+    description = Column(UnicodeText(10240))
+    status = Column(Unicode(255), nullable=False, default=STATUS_NEW) # only for closedness, not approve/reject/etc
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    updated_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    user_id = Column(Integer(), ForeignKey('users.user_id'), nullable=False, unique=None)
     _revisions = Column('revisions', UnicodeText(20500))  # 500 revisions max
-    org_repo_id = Column('org_repo_id', Integer(), ForeignKey('repositories.repo_id'), nullable=False)
-    org_ref = Column('org_ref', Unicode(255), nullable=False)
-    other_repo_id = Column('other_repo_id', Integer(), ForeignKey('repositories.repo_id'), nullable=False)
-    other_ref = Column('other_ref', Unicode(255), nullable=False)
+    org_repo_id = Column(Integer(), ForeignKey('repositories.repo_id'), nullable=False)
+    org_ref = Column(Unicode(255), nullable=False)
+    other_repo_id = Column(Integer(), ForeignKey('repositories.repo_id'), nullable=False)
+    other_ref = Column(Unicode(255), nullable=False)
 
     @hybrid_property
     def revisions(self):
@@ -2334,9 +2336,9 @@ class PullRequestReviewers(Base, BaseModel):
         self.user = user
         self.pull_request = pull_request
 
-    pull_requests_reviewers_id = Column('pull_requests_reviewers_id', Integer(), nullable=False, primary_key=True)
-    pull_request_id = Column("pull_request_id", Integer(), ForeignKey('pull_requests.pull_request_id'), nullable=False)
-    user_id = Column("user_id", Integer(), ForeignKey('users.user_id'), nullable=True)
+    pull_requests_reviewers_id = Column(Integer(), nullable=False, primary_key=True)
+    pull_request_id = Column(Integer(), ForeignKey('pull_requests.pull_request_id'), nullable=False)
+    user_id = Column(Integer(), ForeignKey('users.user_id'), nullable=True)
 
     user = relationship('User')
     pull_request = relationship('PullRequest')
@@ -2357,11 +2359,11 @@ class Notification(Base, BaseModel):
     TYPE_PULL_REQUEST = u'pull_request'
     TYPE_PULL_REQUEST_COMMENT = u'pull_request_comment'
 
-    notification_id = Column('notification_id', Integer(), nullable=False, primary_key=True)
-    subject = Column('subject', Unicode(512), nullable=True)
-    body = Column('body', UnicodeText(50000), nullable=True)
-    created_by = Column("created_by", Integer(), ForeignKey('users.user_id'), nullable=True)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    notification_id = Column(Integer(), nullable=False, primary_key=True)
+    subject = Column(Unicode(512), nullable=True)
+    body = Column(UnicodeText(50000), nullable=True)
+    created_by = Column(Integer(), ForeignKey('users.user_id'), nullable=True)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
     type_ = Column('type', Unicode(255))
 
     created_by_user = relationship('User')
@@ -2369,8 +2371,8 @@ class Notification(Base, BaseModel):
 
     @property
     def recipients(self):
-        return [x.user for x in UserNotification.query()\
-                .filter(UserNotification.notification == self)\
+        return [x.user for x in UserNotification.query()
+                .filter(UserNotification.notification == self)
                 .order_by(UserNotification.user_id.asc()).all()]
 
     @classmethod
@@ -2407,10 +2409,10 @@ class UserNotification(Base, BaseModel):
         {'extend_existing': True, 'mysql_engine': 'InnoDB',
          'mysql_charset': 'utf8', 'sqlite_autoincrement': True}
     )
-    user_id = Column('user_id', Integer(), ForeignKey('users.user_id'), primary_key=True)
-    notification_id = Column("notification_id", Integer(), ForeignKey('notifications.notification_id'), primary_key=True)
-    read = Column('read', Boolean, default=False)
-    sent_on = Column('sent_on', DateTime(timezone=False), nullable=True, unique=None)
+    user_id = Column(Integer(), ForeignKey('users.user_id'), primary_key=True)
+    notification_id = Column(Integer(), ForeignKey('notifications.notification_id'), primary_key=True)
+    read = Column(Boolean, default=False)
+    sent_on = Column(DateTime(timezone=False), nullable=True, unique=None)
 
     user = relationship('User')
     notification = relationship('Notification')
@@ -2432,14 +2434,14 @@ class Gist(Base, BaseModel):
     GIST_PRIVATE = u'private'
     DEFAULT_FILENAME = u'gistfile1.txt'
 
-    gist_id = Column('gist_id', Integer(), primary_key=True)
-    gist_access_id = Column('gist_access_id', Unicode(250))
-    gist_description = Column('gist_description', UnicodeText(1024))
+    gist_id = Column(Integer(), primary_key=True)
+    gist_access_id = Column(Unicode(250))
+    gist_description = Column(UnicodeText(1024))
     gist_owner = Column('user_id', Integer(), ForeignKey('users.user_id'), nullable=True)
-    gist_expires = Column('gist_expires', Float(53), nullable=False)
-    gist_type = Column('gist_type', Unicode(128), nullable=False)
-    created_on = Column('created_on', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
-    modified_at = Column('modified_at', DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    gist_expires = Column(Float(53), nullable=False)
+    gist_type = Column(Unicode(128), nullable=False)
+    created_on = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
+    modified_at = Column(DateTime(timezone=False), nullable=False, default=datetime.datetime.now)
 
     owner = relationship('User')
 
@@ -2516,6 +2518,6 @@ class DbMigrateVersion(Base, BaseModel):
         {'extend_existing': True, 'mysql_engine': 'InnoDB',
          'mysql_charset': 'utf8', 'sqlite_autoincrement': True},
     )
-    repository_id = Column('repository_id', String(250), primary_key=True)
-    repository_path = Column('repository_path', Text)
-    version = Column('version', Integer)
+    repository_id = Column(String(250), primary_key=True)
+    repository_path = Column(Text)
+    version = Column(Integer)
