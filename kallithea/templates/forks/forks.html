@@ -1,0 +1,30 @@
+## -*- coding: utf-8 -*-
+<%inherit file="/base/base.html"/>
+
+<%block name="title">
+    ${_('%s Forks') % c.repo_name}
+</%block>
+
+<%def name="breadcrumbs_links()">
+    ${_('Forks')}
+</%def>
+
+<%block name="header_menu">
+    ${self.menu('repositories')}
+</%block>
+
+<%def name="main()">
+${self.repo_context_bar('showforks')}
+<div class="box">
+    <!-- box / title -->
+    <div class="title">
+        ${self.breadcrumbs()}
+    </div>
+    <!-- end box / title -->
+    <div class="table">
+        <div id="forks">
+            <%include file='forks_data.html'/>
+        </div>
+    </div>
+</div>
+</%def>

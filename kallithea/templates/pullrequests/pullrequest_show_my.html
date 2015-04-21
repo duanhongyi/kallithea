@@ -1,0 +1,36 @@
+<%inherit file="/base/base.html"/>
+
+<%block name="title">
+    ${_('My Pull Requests')}
+</%block>
+
+<%def name="breadcrumbs_links()">
+    ${_('My Pull Requests')}
+</%def>
+
+<%block name="header_menu">
+    ${self.menu('my_pullrequests')}
+</%block>
+
+<%def name="main()">
+
+<div class="box">
+    <!-- box / title -->
+    <div class="title">
+        ${self.breadcrumbs()}
+    </div>
+
+    <div class="normal-indent">
+        <div>
+        %if c.closed:
+            ${h.link_to(_('Hide closed pull requests (only show open pull requests)'), h.url('my_pullrequests'))}
+        %else:
+            ${h.link_to(_('Show closed pull requests (in addition to open pull requests)'), h.url('my_pullrequests',closed=1))}
+        %endif
+        </div>
+    </div>
+
+    <%include file='pullrequest_show_my_data.html'/>
+
+</div>
+</%def>

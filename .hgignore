@@ -1,0 +1,27 @@
+syntax: glob
+*.pyc
+*.swp
+*.sqlite
+*.tox
+*.egg-info
+*.egg
+*.mo
+
+syntax: regexp
+^rcextensions
+^build
+^dist/
+^docs/build/
+^docs/_build/
+^data$
+^sql_dumps/
+^\.settings$
+^\.project$
+^\.pydevproject$
+^\.coverage$
+^kallithea\.db$
+^test\.db$
+^Kallithea\.egg-info$
+^my\.ini$
+^fabfile.py
+^\.idea$
